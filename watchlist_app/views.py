@@ -8,10 +8,10 @@ from rest_framework.views import APIView
 # Create your views here.
 
 
-class MovieListAPIView(APIView):
+class WatchListAPIView(APIView):
 
     def get(self, request):
-        movies = Movies.objects.all()
+        movies = WatchList.objects.all()
         serializer = MovieSerializer(movies, many=True)
         return Response(serializer.data)
     
@@ -25,19 +25,19 @@ class MovieListAPIView(APIView):
             return Response(serializer.errors)
 
 
-class MovieDetailsAPIView(APIView):
+class WatchListDetailsAPIView(APIView):
 
     def get(self, request, pk):
         try:
-            movie = Movies.objects.get(pk=pk)
-        except Movies.DoesNotExist:
+            movie = WatchList.objects.get(pk=pk)
+        except WatchList.DoesNotExist:
             return Response({'error':'Movie does not exist for this ID'}, status=status.HTTP_404_NOT_FOUND)
         
         serializer = MovieSerializer(movie)
         return Response(serializer.data)
     
     def put(self, request, pk):
-        movie = Movies.objects.get(pk=pk)
+        movie = WatchList.objects.get(pk=pk)
         serializer = MovieSerializer(movie, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -46,7 +46,7 @@ class MovieDetailsAPIView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request, pk):
-        movie = Movies.objects.get(pk=pk)
+        movie = WatchList.objects.get(pk=pk)
         movie.delete()
         return Response({"message":"Data has been deleted"}, status=status.HTTP_204_NO_CONTENT)
 
