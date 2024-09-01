@@ -1,0 +1,19 @@
+version: "3.10"
+
+services:    
+  web:
+    container_name: watchmate
+    build: .
+    command: >
+      bash -c """
+              python manage.py runserver 0.0.0.0:8000 --settings=watchmate.settings.local
+              """
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    networks:
+      - watchmate_services
+    
+networks:
+  watchmate_services:

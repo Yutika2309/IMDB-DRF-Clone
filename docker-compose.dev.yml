@@ -1,0 +1,36 @@
+version: "3.10"
+
+services:
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - PGHOST=host.docker.internal
+      - PGPORT=5432
+      - PGUSER=postgres
+      - POSTGRES_DB=watchmate_db
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data 
+    networks:
+      - watchmate_services
+    
+  web:
+    container_name: watchmate
+    build: .
+    command: >
+      bash -c """
+              python manage.py runserver 0.0.0.0:8000 --settings=watchmate.settings.dev
+              """
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    networks:
+      - watchmate_services
+    
+networks:
+  watchmate_services:
