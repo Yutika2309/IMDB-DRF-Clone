@@ -13,10 +13,16 @@ class StreamPlatform(models.Model):
         return self.name
 
 class WatchList(models.Model):
+
+    CONTENT_TYPE = (
+        ("Movie", "movie"),
+        ("TV Series", "series")
+    )
     title = models.CharField(max_length=20)
     year = models.IntegerField()
     storyline = models.CharField(max_length=500)
     active = models.BooleanField(default=True)
+    content_type = models.CharField(choices=CONTENT_TYPE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
